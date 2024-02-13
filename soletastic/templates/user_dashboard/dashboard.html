@@ -25,6 +25,8 @@
       <link rel="stylesheet" href="{% static 'assets/css/font-awesome-pro.css' %}">
       <link rel="stylesheet" href="{% static 'assets/css/default.css' %}">
       <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+      <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
    </head>
 
 
@@ -635,6 +637,7 @@
                 </div>
             </div>
         </header>
+        {% block content %}
         <!-- offcanvas area start -->
         <div class="offcanvas__area">
             <div class="offcanvas__wrapper">
@@ -702,12 +705,102 @@
 
 
      </body>
+     
+   <!-- topsell__area-start -->
+   <section class="topsell__area-1 pt-15">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section__head d-flex justify-content-between mb-10">
+                    <div class="section__title">
+                        <h5 class="st-titile-d">Top Deals Of The Day</h5>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>            
+     
+        <div class="row">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for pro in pro %}
+                        {% if pro.is_deleted %}
+                            <div class="swiper-slide">
+                                <div class="product-bs-slider">
+                                    <div class="product__item">
+                                        <div class="product__thumb fix">
+                                            <div class="product-image w-img">
+                                                <a href="{% url 'view_product' pro.id %}">
+                                                    <img src="{{ pro.image.url }}" alt="product">
+                                                </a>
+                                            </div>
+                                            <div class="product-action">
+                                                <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId">
+                                                    <i class="fal fa-eye"></i>
+                                                    <i class="fal fa-eye"></i>
+                                                </a>
+                                                <a href="#" class="icon-box icon-box-1">
+                                                    <i class="fal fa-heart"></i>
+                                                    <i class="fal fa-heart"></i>
+                                                </a>
+                                                <a href="#" class="icon-box icon-box-1">
+                                                    <i class="fal fa-layer-group"></i>
+                                                    <i class="fal fa-layer-group"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="product__content">
+                                            <h6><a href="product-details.html">{{ pro.name }}</a></h6>
+                                            <div class="rating mb-5">
+                                                <ul>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                </ul>
+                                                <span>(01 review)</span>
+                                            </div>
+                                            <div class="price mb-10">
+                                                <span>{{pro.price}}</span>
+                                            </div>
+                                            <div class="progress mb-5">
+                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="progress-rate">
+                                                <span>Sold:312/1225</span>
+                                            </div>
+                                        </div>
+                                        <div class="product__add-cart text-center">
+                                            <button type="button" class="cart-btn product-modal-sidebar-open-btn d-flex align-items-center justify-content-center w-100">
+                                                Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+                <!-- If we need navigation buttons -->
+                {% comment %} <div class="bs-button bs-button-prev"><i class="fal fa-chevron-left"></i></div>
+                <div class="bs-button bs-button-next"><i class="fal fa-chevron-right"></i></div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+</section>
 
+
+
+<!-- topsell__area-end -->
 
 
     <!-- footer-start -->
 
-
+{% endblock %}
     <!-- footer-start -->
 <footer>
     <div class="fotter-area d-dark-bg">
@@ -862,7 +955,7 @@
                                 <a href="contact.html"><img src="assets/img/payment/payment.png" alt=""></a>
                             </div>
                             <div class="copy-right-area text-center">
-                                <p>Copyright © <span>DukaMarket.</span> All Rights Reserved. Powered by <a href="#"><span class="main-color">Theme_Pure.</span></a></p>
+                                <p>Copyright © <span>soletastic.</span> All Rights Reserved. Powered by </p>
                             </div>
                         </div>
                     </div>
@@ -873,6 +966,18 @@
 </footer>
 <!-- footer-end -->
 
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    });
+</script>
 
 <!-- JS here -->
 <script src="{% static 'assets/js/vendor/jquery.js' %}"></script>    

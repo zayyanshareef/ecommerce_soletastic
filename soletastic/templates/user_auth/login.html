@@ -126,7 +126,7 @@
         </svg>
    </div>
 
-    {% comment %} ...............................Header.............................  {% endcomment %}
+    <!--...............................Header............................. -->
 
 
 <main>
@@ -140,13 +140,14 @@
                     {% if message.tags == 'error' %}
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{message}}
+                    
                         <button type="button" class="close" data-dismiss="alert" aria-label="close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         </div>
                     {% endif %}
                 {% endfor %}
-                {% endif %}      
+                {% endif %}     
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-6">
                     <div class="basic-login mb-50">
@@ -177,41 +178,6 @@
                     </div>
                   
                 </div>
-               
-                {% comment %} <div class="col-lg-6">
-                    <div class="basic-login">
-                        <h5>Register</h5>
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <label for="username">Username<span>*</span></label>
-                            <input id="username" type="text" placeholder="Enter Username" name="username" required>
-
-                            <label for="username">Last name<span>*</span></label>
-                            <input id="Lastname" type="text" placeholder="Enter Last name" name="Lastname" required>
-                            
-                            <label for="email-id">Email Address <span>*</span></label>
-                            <input id="email-id" type="email" placeholder="Email address..." name="email" required>
-
-                            <label for="PhoneNumber">Phone Number <span>*</span></label>
-                            <input id="PhoneNumber" type="text" placeholder="Enter Phone Number..." name="PhoneNumber" required>
-
-                            <label for="userpass">Password <span>*</span></label>
-                            <input id="userpass" type="password" placeholder="Enter password..." name="password" required>
-
-                            <label for="userpass">Confirm Password <span>*</span></label>
-                            <input id="con_pass" type="password" placeholder="Confirm password..." name="con_pass" required>
-                            
-                            <div class="login-action mb-10 fix">
-                                <p>Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a href="#">privacy policy</a>.</p>
-                            </div>
-                            <button type ="submit" class="tp-in-btn w-100">Register</a>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- account-area-end --> {% endcomment %}
 
     <!-- cta-area-start -->
     <section class="cta-area d-ldark-bg pt-55 pb-10">

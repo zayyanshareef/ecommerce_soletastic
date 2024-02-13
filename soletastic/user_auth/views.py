@@ -34,19 +34,19 @@ def Login(request):
         User=authenticate(request, username=email, password=password)
    
         
-        # try :
+        try :
             
-        #    status=Custom_User.objects.get(email=email)
+           status=Custom_User.objects.get(email=email)
         
-        # except Exception as e:
+        except Exception as e:
             
-        #     messages.error(request, "Email or Passwors mismatch")
-        #     return render(request,'user_auth/Login.html')
+            messages.error(request, "Email or Passwors mismatch")
+            return render(request,'user_auth/Login.html')
         
-        # if not status.is_active:
+        if not User.is_active:
             
-        #     messages.error(request, "Your account is Blocked")
-        #     return render(request,'user_auth/Login.html')
+            messages.error(request, "Your account is Blocked")
+            return render(request,'user_auth/Login.html')
         
         if User is not None  and not User.is_staff:
             request.session['user_email']=email
@@ -119,16 +119,18 @@ def Signup(request):
         else:
             try:
                  values=otp()
+                 print("////////////////")
 
             except Exception as e:
                  
                  messages.error(request,"OTP genaration failed")
+                 return redirect('signup')
 
         
         user_data = Custom_User.objects.create_user(email=email,password=password,username=username,ph_no=phone)
         user_data.save()
         
-        
+        print(values)
         request.session['otp']=values
         request.session['phone']=phone
         
@@ -151,10 +153,16 @@ def otp():
             account_sid = os.getenv("TWILIO_ACCOUNT_SID")
             auth_token = os.getenv("TWILIO_AUTH_TOKEN")
             client = Client(account_sid,auth_token)
+            print(client,"WDEWFEW")
 
             msg = client.messages.create(
-                body =F"Your OTP is {otp}",from_=+16502972288,to =my_number,
-            )
+            
+            body = F"Your OTP is {otp}",
+            from_= "+16592465558",
+            to = my_number,
+            
+                                     )
+            print(otp,"///////////")
             return otp
 
 

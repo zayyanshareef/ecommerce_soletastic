@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from .models import *
+from user_auth.models import *
+from django.db.models import *
+
 from .views import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators  import user_passes_test
@@ -32,11 +35,11 @@ def Admin(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
-        
-        user = authenticate(email=email, password=password)
-        
-        if user is not None and user.is_staff:
-            login(request, user)
+        print(email,password)
+        users = authenticate(request,username=email, password=password)
+
+        if users is not None and users.is_staff:
+            login(request, users)
             request.session['email_admin'] = email
             return redirect("admin_dashboard")
         else:
@@ -47,10 +50,419 @@ def Admin(request):
 
 #.....................End admin Authentication.............................
 
+def Admin_dashboard(request):
+    return render(request,"admin/admin_dashboard.html")
 
 
 
 
 
+
+
+
+
+#......................Admin logout...................
+
+def Admin_logout(request):
+
+    if 'email_admin' in request.session:
+        
+        email_admin_value =request.session.get('email_admin')
+        del request.session['email_admin']
+        logout(request)
+        
+        return redirect("admin_login")
+
+
+#........................End Admin ......................
+    
+
+#....................User List............................
+    
+@admin_required
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url="admin_app")
+@never_cache
+def User_list(request):
+    
+    user=Custom_User.objects.filter(is_staff=False).values()
+
+    context={
+        "user":user
+    }
+
+    return render(request,"admin/user_list.html",context)
+
+#.....................end user list.......................
+
+
+#......................user unblock..........................
+
+
+def User_unblock(request,id):
+    
+    user=Custom_User.objects.get(id=id)
+    user.is_active=True
+    user.save()
+    return redirect("user_list")
+
+#..................... end user unblock................
+
+#.......................user block.......................
+
+def User_block(request,id):
+    
+    user=Custom_User.objects.get(id=id)
+    user.is_active=False
+    user.save()
+    return redirect("user_list")
+
+#....................end user block...........
+
+
+#....................product category...............
+
+@admin_required
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url="admin_app")
+@never_cache
+
+def Category_list(request):
+    
+    ca =Category.objects.all()
+    context ={
+        'ca' : ca
+    }
+
+    return render(request,"admin/category.html",context)
+
+
+def Add_category(request):
+
+    if request.method == 'POST':
+        name = request.POST.get("category_name")
+
+        if Category.objects.filter(name=name).exists():
+
+            messages.error(request,"This Item Already Exist")
+            return redirect("category_list")
+        
+        Category.objects.create(name=name)
+        return redirect("category_list")
+    
+
+
+
+def Change_status(request,id):
+
+    ca=Category.objects.get(id=id)
+
+    if not ca.is_deleted:
+        ca.is_deleted =True
+        ca.save()
+    
+    else:
+        ca.is_deleted =False
+        ca.save()
+    
+    return redirect('category_list')
+
+
+
+def Delete_category(request,id):
+
+    ca = Category.objects.get(id=id)
+    ca . delete()
+    return redirect("category_list")
+
+
+
+def Update_category(request,id):
+    if request.method == 'POST':
+        name=request.POST.get("category_name")
+
+
+
+        if Category.objects.filter(name=name).exist():
+             
+             messages.error(request,"This Category Already Exist")
+             return redirect("category_list")
+        
+        Category.objects.filter(id=id).update(name=name)
+    return redirect("category_list")
+         
+
+
+#.............................. sub category............................
+
+@admin_required
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url="admin_app")
+@never_cache
+
+def sub_category(request):
+
+    sub = Sub_category.objects.all()
+    main = Category.objects.all()
+
+    context={
+        'sub':sub,
+        'main':main
+    }
+    return render(request,"admin/sub_category.html",context)
+
+
+
+def Add_sub_category(request):
+    if request.method =='POST':
+        sub=request.POST.get("category_name")
+        ca=request.POST.get("category_type")
+
+        if Sub_category.objects.filter(name=sub,category=ca).exists():
+
+            messages.error(request,"Sub Category Already Exist")
+            return redirect("sub_category")
+        
+        id=Category.objects.get(id=ca)
+        Sub_category.objects.create(name=sub,category=id)
+
+        return redirect("sub_category")
+    
+
+
+
+def Status_change(request,id):
+
+    status=Sub_category.objects.get(id=id)
+
+    if not status.is_deleted:
+
+        status.is_deleted=True
+        status.save()
+    else:
+        status.is_deleted= False
+        status.save()
+
+    return redirect("sub_category")
+
+
+
+
+
+def Update_sub_category(request,id):
+    if request.method == 'POST':
+        name=request.POST.get("category_name")
+
+        if Sub_category.objects.filter(name=name).exists():
+            messages.error(request,"Sun Category Already Exist")
+            return redirect("sub_category")
+        
+        Sub_category.objects.filter(id=id).update(name=name)
+
+        return redirect("sub_category")
+    
+
+
+def Delete_sub_category(request,id):
+    sub=Sub_category.objects.get(id=id)
+    sub.delete()
+    
+    return redirect("sub_category")
+    
+
+
+
+#.....................................  product   .......................................
+
+@admin_required
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url="admin_app")
+@never_cache
+def Product_list(request):
+    pro=Product.objects.all()
+    sub=Sub_category.objects.all()
+    print(pro,sub)
+
+
+    context={
+        'pro' : pro,
+        'sub' : sub,
+        
+
+    }
+
+    return render(request,"admin/product.html",context)
+
+
+
+def Product_status(request,id):
+   
+    status=Product.objects.get(id=id)
+    print(status)
+    value=Product_size.objects.all()
+    
+    for i in value:
+        print(i.product)
+        if status == i.product:
+        
+                if not status.is_deleted:
+                    
+                    status.is_deleted = True
+                    status.save()
+                    return redirect("product_list")
+                else:
+                    
+                    status.is_deleted = False
+                    status.save()
+                    return redirect("product_list")
+    else:
+        messages.error(request, "Please add any size")
+        return redirect("product_list")
+    
+
+
+
+from django.core.files.base import ContentFile                    
+def Add_product(request):
+    
+    if request.method == "POST" :
+        
+        name=request.POST.get("product_name")
+        price=request.POST.get("price")
+        discount=request.POST.get("discount")
+        sub_category=request.POST.get("category_type")
+        description=request.POST.get("description")
+        m_image=request.FILES.get("m_image")
+        if int(price) < 1:
+            
+             messages.error(request, "Invalid Price . Price Should Be Above Zero ")
+             return redirect("product_list")
+         
+        if int(discount) < 0:
+            
+            messages.error(request, "Invalid Discound . Discound Should Be Zero or  Above Zero ")
+            return redirect("product_list")
+        
+            
+        sub=Sub_category.objects.get(id=sub_category)
+        pro_id=Product.objects.create(name=name,
+                                      price=price,
+                                      discount=discount,
+                                      sub_category=sub,
+                                      description=description,
+                                      image=m_image )
+        print(pro_id)
+    
+        
+            
+        return redirect("product_list") 
+    
+
+
+
+
+def Delete_product(request,id):
+   
+    pro=Product.objects.get(id=id)
+    pro.delete()
+    
+    return redirect("product_list")
+                    
+
+
+def Update_product(request,id):
+    
+    if request.method == "POST" :
+        
+        up= Product.objects.get(id=id)
+        
+        name=request.POST.get("product_name")
+        price=request.POST.get("price")
+        discount=float(request.POST.get("discount"))
+        sub_category=request.POST.get("category_type")
+        description=request.POST.get("description")
+        image=request.FILES.get("image")
+        
+        
+     
+        if int(price) < 1:
+            
+             messages.error(request, "Invalid Price . Price Should Be Above Zero ")
+             return redirect("product_list")
+         
+        if discount < 0:
+            
+             messages.error(request, "Invalid Discound . Discound Should Be Zero or Above Zero ")
+             return redirect("product_list")
+         
+            
+        sub=Sub_category.objects.get(id=sub_category)
+        
+        up.name=name
+        up.price=price
+        up.discount=discount
+        up.description=description
+        up.sub_category=sub
+
+
+        if image:
+            up.image=image
+            
+        up.save()
+        
+        
+    return redirect("product_list")
+
+
+
+def Add_size(request,id):
+    
+    if request.method == "POST":
+        
+        size=request.POST.get("size")
+        stock=request.POST.get("stock")
+        
+        print(type (id))
+        if int(size) <= 0 or int(stock) <= 0 :
+                
+                messages.error(request, "Invalid Size or Stock .Size and Stock Should Be Above Zero ")
+                return redirect("product_list")
+            
+        else:
+            value=Product.objects.get(id=id)
+            if Product_size.objects.filter(size=size,product=value).exists():
+                
+                messages.error(request, "This size already listed")
+                return redirect("product_list")
+            
+            else:
+                    value=Product.objects.get(id=id)
+                    
+                    Product_size.objects.create(size=size,stock=stock,product=value)
+        
+    return redirect("product_list")
+
+
+
+
+def Edit_size(request,id):
+    
+    if request.method == 'POST':
+        
+        for size_obj in Product_size.objects.filter(product_id=id):
+            
+            size = request.POST.get('size' + str(size_obj.id))
+            stock = request.POST.get('stock' + str(size_obj.id))
+            
+            if int(size) < 0 or int(stock) < 0 :
+                
+                messages.error(request, "Invalid Size or Stock .Size and Stock Should Be Above Zero ")
+                return redirect("product_list")
+            
+            else:
+                size_obj.stock=stock 
+                size_obj.size=size 
+                size_obj.save()
 
         
+    return redirect("product_list")
