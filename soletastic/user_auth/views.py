@@ -33,7 +33,8 @@ def Login(request):
         
         User=authenticate(request, username=email, password=password)
    
-        
+        print(User,"eadfaw")
+        # print(User.is_active)
         try :
             
            status=Custom_User.objects.get(email=email)
@@ -42,18 +43,23 @@ def Login(request):
             
             messages.error(request, "Email or Passwors mismatch")
             return render(request,'user_auth/Login.html')
-        
-        if not User.is_active:
+        if User:
+
+            if not status.is_active:
+                
+                messages.error(request, "Your account is Blocked")
+                return render(request,'user_auth/Login.html')
             
-            messages.error(request, "Your account is Blocked")
-            return render(request,'user_auth/Login.html')
-        
-        if User is not None  and not User.is_staff:
-            request.session['user_email']=email
-            login(request,User)
-            return redirect('dashboard')
-            
-        else: 
+            elif User is not None  and not User.is_staff:
+                request.session['user_email']=email
+                login(request,User)
+                return redirect('dashboard')
+                
+            else: 
+                messages.error(request, "Email or Password mismatch")
+                return render(request,'user_auth/Login.html')
+        else:
+
             messages.error(request, "Email or Password mismatch")
             return render(request,'user_auth/Login.html')
             
@@ -216,3 +222,119 @@ def Logout(request):
 
         return render(request,'user_dashboard/dashboard.html')
      
+
+
+#.........................forgot password......................
+     
+@never_cache
+def Forgot_password(request):
+
+    if request.method == "POST":
+        action=request.POST.get("action")
+        email=request.POST.get("email")
+
+        print(action,"hklhhl")
+        print(email,"......werer")
+
+        if action == "send_OTP":
+
+            print("zatyyyya")
+
+
+            try:
+                email_f=Custom_User.objects.get(email=email)
+
+            except Exception as e:
+                messages.error(request,"Email not exist")
+                return redirect("forgot_password")
+            
+            try:
+                f_otp=otp()
+
+            except Exception as e:
+
+                messages.error(request,"OTP genaration failed")
+                return redirect("forgot_password")
+            
+            request.session['otp']=f_otp
+            request.session['email'] =email_f.email
+            return render(request,'user_auth/forgot_otp.html')
+        
+
+        else:
+            return render(request,"user_auth/login.html")
+        
+    return render(request,"user_auth/forgot_password.html")
+
+
+#.......................................forgot otp check...................
+
+@never_cache
+def Forget_OTP_check(request):
+    
+    
+    
+    if request.method == "POST":
+        
+        f_otp=request.POST.get("otp") 
+        action=request.POST.get("action")
+        
+        if action == "verify":
+            
+            f_re_otp=request.session.get("F_re_otp")
+            otp=request.session.get("otp")
+            
+            
+            
+            if f_otp == str(otp) or  f_otp ==str(f_re_otp) :
+                
+                return redirect("new_pass")
+               
+            else:
+                messages.error(request,"OTP  Incurrct")
+                return redirect("forget_OTP_check") 
+            
+        else:
+    
+            return render (request,'user_auth/new_password.html')
+        
+    return render (request,'user_auth/forget_otp.html')
+
+
+@never_cache
+def New_password(request):
+
+    if request.method=="POST":
+        password=request.POST.get("password")
+        con_pass=request.POST.get("con_password")
+        action=request.POST.get("action")
+        pattern_pass = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$'
+
+        if action =="save":
+
+            if not re.match(pattern_pass,password):
+                messages.error(request,"The password is too weak")
+                return render(request,'user_auth/new_password.html')
+            
+            if password != con_pass:
+                messages.error(request,"Password  mismatch")
+                return redirect("new_password")
+            
+            else:
+                user=Custom_User.objects.get(email=request.session.get('email'))
+                
+                hashed_password = make_password(password)
+                user.password = hashed_password
+                user.save()
+                return redirect("login")
+            
+        else:
+            return render (request,'user_auth/login.html')
+    return render(request,'user_auth/new_password.html')
+        
+
+            
+
+
+
+            

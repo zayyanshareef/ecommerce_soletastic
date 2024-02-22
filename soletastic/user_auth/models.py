@@ -54,3 +54,28 @@ class Custom_User(AbstractBaseUser, PermissionsMixin):
 
     def __iter__(self):
         return self.id
+    class Meta:
+        ordering = ['-id']
+    
+
+
+
+
+
+class User_Address(models.Model):
+    name=models.CharField(max_length=100,null=False)
+    email=models.EmailField(null=False,blank=False)
+    phone=models.CharField(max_length=100,null=False,blank=False)
+    house=models.TextField(null=False,blank=False)
+    street=models.TextField(null=False,blank=False)
+    city=models.TextField(null=False,blank=False)
+    state=models.TextField(null=False,blank=False)
+    country=models.TextField(null=False,blank=False)
+    pin_code=models.TextField(null=False,blank=False)
+    location=models.TextField(null=False,blank=False)
+    customuser=models.ForeignKey(Custom_User,on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-id']
+
+

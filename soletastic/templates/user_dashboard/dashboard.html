@@ -26,6 +26,8 @@
       <link rel="stylesheet" href="{% static 'assets/css/default.css' %}">
       <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
       <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
    </head>
 
@@ -175,7 +177,7 @@
                             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4">
                                 <div class="header__info">
                                     <div class="logo">
-                                        <a href="index.html" class="logo-image"><img src="{% static 'assets/img/logo/logo1.png' %}" alt="logo"></a>
+                                        <a href="{% url 'dashboard' %}" class="logo-image"><img src="{% static 'assets/img/logo/logo1.png' %}" alt="logo"></a>
                                     </div>
                                 </div>
                             </div>
@@ -236,7 +238,7 @@
                                         </a>
                                     </div>
                                     <div class="block-cart action">
-                                        <a class="icon-link" href="cart.html">
+                                        <a class="icon-link" href="{% url 'user_cart' %}">
                                         <i class="flaticon-shopping-bag"></i>
                                         <span class="count">1</span>
                                         <span class="text">
@@ -493,7 +495,7 @@
                                                         <li><a href="product-details.html">Shop 4 Column</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="shop.html">Product Pages</a>
+                                                {% comment %} <li><a href="shop.html">Product Pages</a>
                                                     <ul class="mega-item">
                                                         <li><a href="product-details.html">Product Details</a></li>
                                                         <li><a href="product-details.html">Product V2</a></li>
@@ -502,8 +504,8 @@
                                                         <li><a href="product-details.html">External Product</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="shop.html">Other Pages</a>
-                                                    <ul class="mega-item">
+                                                <li><a href="shop.html">Other Pages</a> {% endcomment %}
+                                                    {% comment %} <ul class="mega-item">
                                                         <li><a href="product-details.html">wishlist</a></li>
                                                         <li><a href="product-details.html">Shopping Cart</a></li>
                                                         <li><a href="product-details.html">Checkout</a></li>
@@ -511,21 +513,21 @@
                                                         <li><a href="product-details.html">Register</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="shop.html">Phone &amp; Tablets</a>
-                                                    <ul class="mega-item">
+                                                <li><a href="shop.html">Phone &amp; Tablets</a> {% endcomment %}
+                                                    {% comment %} <ul class="mega-item">
                                                         <li><a href="product-details.html">Catagory 1</a></li>
                                                         <li><a href="product-details.html">Catagory 2</a></li>
                                                         <li><a href="product-details.html">Catagory 3</a></li>
                                                         <li><a href="product-details.html">Catagory 4</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="shop.html">Phone &amp; Tablets</a>
-                                                    <ul class="mega-item">
+                                                    </ul> {% endcomment %}
+                                                {% comment %} </li> {% endcomment %}
+                                                {% comment %} <li><a href="shop.html">Phone &amp; Tablets</a> {% endcomment %}
+                                                    {% comment %} <ul class="mega-item">
                                                         <li><a href="product-details.html">Catagory 1</a></li>
                                                         <li><a href="product-details.html">Catagory 2</a></li>
                                                         <li><a href="product-details.html">Catagory 3</a></li>
                                                         <li><a href="product-details.html">Catagory 4</a></li>
-                                                    </ul>
+                                                    </ul> {% endcomment %}
                                                 </li>
                                             </ul>
                                         </li>
@@ -535,28 +537,28 @@
                                                 <div class="container container-mega">
                                                     <ul>
                                                         <li>
-                                                            <ul>
-                                                            <li class="title"><a href="shop.html">SHOP LAYOUT</a></li>
+                                                            {% comment %} <ul> {% endcomment %}
+                                                            {% comment %} <li class="title"><a href="shop.html">SHOP LAYOUT</a></li>
                                                             <li><a href="shop.html">Pagination</a></li>
                                                             <li><a href="shop.html">Ajax Load More</a></li>
                                                             <li><a href="shop.html">Infinite Scroll</a></li>
                                                             <li><a href="shop.html">Sidebar Right</a></li>
                                                             <li><a href="shop.html">Sidebar Left</a></li>
-                                                            </ul>
-                                                        </li>
+                                                            </ul> {% endcomment %}
+                                                        {% comment %} </li>
                                                         <li>
-                                                            <ul>
-                                                            <li class="title"><a href="shop.html">SHOP PAGES</a></li>
+                                                            <ul> {% endcomment %}
+                                                            {% comment %} <li class="title"><a href="shop.html">SHOP PAGES</a></li>
                                                             <li><a href="shop.html">List View</a></li>
                                                             <li><a href="shop.html">Small Products</a></li>
                                                             <li><a href="shop.html">Large Products</a></li>
                                                             <li><a href="shop.html">Shop — 3 Items</a></li>
                                                             <li><a href="shop.html">Shop — 4 Items</a></li>
                                                             <li><a href="shop.html">Shop — 5 Items</a></li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>
-                                                            <ul>
+                                                            </ul> {% endcomment %}
+                                                        {% comment %} </li>
+                                                        <li> {% endcomment %}
+                                                            {% comment %} <ul>
                                                             <li class="title"><a href="shop.html">PRODUCT LAYOUT</a></li>
                                                             <li><a href="shop.html">Description Sticky</a></li>
                                                             <li><a href="shop.html">Product Carousel</a></li>
@@ -564,10 +566,10 @@
                                                             <li><a href="shop.html">Thumbnail Left</a></li>
                                                             <li><a href="shop.html">Thumbnail Right</a></li>
                                                             <li><a href="shop.html">Thumbnail Botttom</a></li>
-                                                            </ul>
-                                                        </li>
-                                                        <li>
-                                                            <ul>
+                                                            </ul> {% endcomment %}
+                                                        {% comment %} </li>
+                                                        <li> {% endcomment %}
+                                                            {% comment %} <ul>
                                                             <li class="title"><a href="shop.html">Basketball</a></li>
                                                             <li><a href="shop.html">East Hampton Fleece</a></li>
                                                             <li><a href="shop.html">Faxon Canvas Low</a></li>
@@ -576,9 +578,9 @@
                                                             <li><a href="shop.html">NikeCourt Zoom</a></li>
                                                             <li><a href="shop.html">NikeCourts Air Zoom</a></li>
                                                             </ul>
-                                                        </li>
-                                                        <li>
-                                                            <ul>
+                                                        </li> {% endcomment %}
+                                                        {% comment %} <li> {% endcomment %}
+                                                            {% comment %} <ul>
                                                             <li class="title"><a href="shop.html">Basketball</a></li>
                                                             <li><a href="shop.html">East Hampton Fleece</a></li>
                                                             <li><a href="shop.html">Faxon Canvas Low</a></li>
@@ -586,21 +588,21 @@
                                                             <li><a href="shop.html">Kaoreet Lobortis</a></li>
                                                             <li><a href="shop.html">NikeCourt Zoom</a></li>
                                                             <li><a href="shop.html">NikeCourts Air Zoom</a></li>
-                                                            </ul>
-                                                        </li>
-                                                        <li class="mega-image hover-effect" style="background-image: url(assets/img/bg/menu-item.jpg);"> 
+                                                            </ul> {% endcomment %}
+                                                        {% comment %} </li> {% endcomment %}
+                                                        {% comment %} <li class="mega-image hover-effect" style="background-image: url(assets/img/bg/menu-item.jpg);"> 
                                                             <ul>
                                                               <li><a href="shop.html">
                                                                 <h4>Top Cameras <br> Bestseller Products</h4>
                                                                 <h5>4K</h5>
-                                                                <h6>Sale Up To <span>60% Off</span></h6>
-                                                              </a></li>
+                                                                <h6>Sale Up To <span>60% Off</span></h6> {% endcomment %}
+                                                              {% comment %} </a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </div> {% endcomment %}
                                                 <div class="offer mt-40">
-                                                    <p><b>30% OFF</b> the shipping of your first order with the code: <b>DUKA-SALE30</b></p>
+                                                    {% comment %} <p><b>30% OFF</b> the shipping of your first order with the code: <b>DUKA-SALE30</b></p> {% endcomment %}
                                                 </div>
                                             </div>
                                         </li>
@@ -613,7 +615,7 @@
                                         <li>
                                             <a href="about.html">Pages <i class="far fa-angle-down"></i></a>
                                             <ul class="submenu">
-                                                <li><a href="my-account.html">My Account</a></li>
+                                                <li><a href="{% url 'user_profile' %}">My Account</a></li>
                                                 <li><a href="product-details.html">Product Details</a></li>
                                                 <li><a href="faq.html">FAQs pages</a></li>
                                                 <li><a href="cart.html">Cart</a></li>

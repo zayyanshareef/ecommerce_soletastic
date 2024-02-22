@@ -14,4 +14,12 @@ urlpatterns = [
 
 
     # .........................end..........................
+
+    #/////////////////////////// forgot password ///////////////////
+
+
+
+    path('forgot_password/',views.Forgot_password,name='forgot_password'),
+    path('forget_OTP_check/',views.Forget_OTP_check,name='forget_OTP_check'),
+    path('new_password/',views.New_password,name='new_password'),
 ]
